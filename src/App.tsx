@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Break from './Break';
 import Session from './Session';
 import Timer from './Timer';
@@ -27,6 +27,9 @@ function App() {
     newLength < 0 ? setBreakLength(0) : setBreakLength(newLength);
   };
 
+  useEffect(() => {
+    setTmeLeft(sessionLength);
+  }, [sessionLength]);
   return (
     <div className="flex flex-col">
       <h1 className="font-bold text-green-600 text-center text-5xl mb-6">

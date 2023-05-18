@@ -14,10 +14,25 @@ const Timer = ({ timeLeft, timerLabel }) => {
       </p>
       <p
         id="time-left"
-        className="text-[3rem] text-center font-bold text-green-600"
+        className="text-[3rem] text-center font-bold text-green-600 mt-6"
       >
         {timeDisplay}
       </p>
+      <div className="flex flex-row justify-center mt-6 gap-3">
+        <button
+          id="start_stop"
+          className="font-bold text-rose-700 bg-green-600 hover:text-green-600 hover:bg-rose-700 rounded-full px-8 py-9 max-w-min transition duration-300 ease-in"
+        >
+          Start
+        </button>
+        <button
+          id="reset"
+          className="font-bold text-rose-700 bg-green-600 hover:text-green-600 hover:bg-rose-700 rounded-full px-8 py-9 max-w-min transition duration-300 ease-in"
+        >
+          {' '}
+          Reset
+        </button>
+      </div>
     </div>
   );
 };
