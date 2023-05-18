@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react';
 import Break from './Break';
 import Session from './Session';
 import Timer from './Timer';
+import { GiTomato } from 'react-icons/gi';
 
 function App() {
   const [isSession, setIsSession] = useState<boolean>(true);
   const [sessionLength, setSessionLength] = useState<number>(25 * 60);
   const [breakLength, setBreakLength] = useState(300);
-  const [timeLeft, setTmeLeft] = useState(sessionLength);
+  const [timeLeft, setTimeLeft] = useState(sessionLength);
+  const [pause, setPause] = useState(true);
+  const [currentSession, setCurrentSession] = useState('Session');
 
   const sessionLengthPlus = () => {
     return setSessionLength(sessionLength + 60);
@@ -28,11 +31,57 @@ function App() {
   };
 
   useEffect(() => {
-    setTmeLeft(sessionLength);
+    setTimeLeft(sessionLength);
   }, [sessionLength]);
+
+  const changeTime = () => {
+    if (timeLeft > 0) {
+      setTimeLeft((timeLeft) => timeLeft - 1);
+    }
+    if (timeLeft === 0) {
+      if (currentSession === 'Session') {
+        setCurrentSession('Break');
+        setTimeLeft(breakLength);
+      } else {
+        setTimeLeft(sessionLength);
+        setCurrentSession('Session');
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (!pause) {
+      const interval = setInterval(changeTime, 1000);
+      return () => clearInterval(interval);
+    }
+  });
+
+  const startTimer = () => {
+    setPause(false);
+  };
+
+  const stopTimer = () => {
+    setPause(true);
+  };
+
+  const startStop = () => {
+    pause ? startTimer() : stopTimer();
+  };
+
+  const resetTimer = () => {
+    setSessionLength(1500);
+    setBreakLength(300);
+    setCurrentSession('Session');
+    setTimeLeft(sessionLength);
+    setPause(true);
+  };
+
   return (
     <div className="flex flex-col">
-      <h1 className="font-bold text-green-600 text-center text-5xl mb-6">
+      <h1 className="font-bold text-green-600 text-center justify-center flex text-5xl mb-6">
+        <span>
+          <GiTomato />
+        </span>
         Tomaat.
       </h1>
       <div id="controls" className="flex gap-[4rem] justify-center ">
@@ -47,7 +96,13 @@ function App() {
           sessionLengthMinus={sessionLengthMinus}
         />
       </div>
-      <Timer timeLeft={timeLeft} timerLabel={isSession ? 'Session' : 'Break'} />
+      <Timer
+        timeLeft={timeLeft}
+        timerLabel={currentSession}
+        buttonLabel={pause ? 'Start' : 'Stop'}
+        startStop={startStop}
+        resetTimer={resetTimer}
+      />
     </div>
   );
 }
