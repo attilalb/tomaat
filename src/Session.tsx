@@ -1,21 +1,14 @@
-import { useState } from 'react';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
 
 dayjs.extend(duration);
 
-export default function Session() {
-  const [sessionLength, setSessionLength] = useState<number>(25 * 60);
-
-  const sessionLengthPlus = () => {
-    return setSessionLength(sessionLength + 60);
-  };
-
-  const sessionLengthMinus = () => {
-    const newLength = sessionLength - 60;
-    newLength < 0 ? setSessionLength(0) : setSessionLength(newLength);
-  };
-  const sessionDisplay = dayjs.duration(sessionLength, 'seconds').minutes()
+export default function Session({
+  sessionLength,
+  sessionLengthPlus,
+  sessionLengthMinus,
+}) {
+  const sessionDisplay = dayjs.duration(sessionLength, 'seconds').minutes();
 
   return (
     <div id="session-controls" className="flex flex-col gap-3">
